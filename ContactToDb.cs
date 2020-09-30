@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +11,21 @@ namespace rahul_parasghar.Db
 {
     public class ContactToDb
     {
+        /* 
+         *   Sample Connection String Are Below
+         *   With password
+         *   "Server=myServerName\myInstanceName;Database=myDataBase;User Id=myUsername;Password=myPassword;"
+         *   
+         *   With local db 1
+         *   "Server=(localdb)\MyInstance;Integrated Security=true;"
+         *   
+         *   
+         *     With local db 2
+         *    "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + DbName + ";Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=False"
+         *   
+         * 
+         * 
+         */
         private static string DbName = "Vivek";
         public static void SetConfig(string pconnectionStr)
         {
