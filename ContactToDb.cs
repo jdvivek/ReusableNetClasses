@@ -57,27 +57,34 @@ namespace rahul_parasghar.Db
             result = true;
             return result;
         }
-        public static T GetOne<T>(string procedureName, object model) where T : new()
+        public static T GetOne<T>(string procedureName, object model=null) where T : new()
         {
             dynamic result = new T();
             var typ = result.GetType();
-
             var allproperties = typ.GetProperties();
+            Type modelType = null;
+            PropertyInfo [] Modelallproperties = null;
+            
 
-            Type modelType = model.GetType();
-            var Modelallproperties = modelType.GetProperties();
-
+            if (model != null)
+            {
+                 modelType = model.GetType();
+                 Modelallproperties = modelType.GetProperties();
+            }
             using (SqlConnection con = new SqlConnection(ConnectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(procedureName, con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    for (int x = 0; x < Modelallproperties.Length; x++)
+                    if (model != null)
                     {
-                        var prop = Modelallproperties[x];
-                        cmd.Parameters.AddWithValue("@" + prop.Name, prop.GetValue(model, null));
+                        for (int x = 0; x < Modelallproperties.Length; x++)
+                        {
+                            var prop = Modelallproperties[x];
+                            cmd.Parameters.AddWithValue("@" + prop.Name, prop.GetValue(model, null));
 
 
+                        }
                     }
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -98,18 +105,34 @@ namespace rahul_parasghar.Db
 
             return result;
         }
-        public static List<T> GetAll<T>(string procedureName) where T : new()
+        public static List<T> GetAll<T>(string procedureName, object model=null) where T : new()
         {
             List<T> list = new List<T>();
 
 
-           
-           
+            Type modelType = null;
+            PropertyInfo[] Modelallproperties = null;
+            if (model != null)
+            {
+                modelType = model.GetType();
+                Modelallproperties = modelType.GetProperties();
+            }
+
             using (SqlConnection con = new SqlConnection(ConnectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(procedureName, con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    if (model != null)
+                    {
+                        for (int x = 0; x < Modelallproperties.Length; x++)
+                        {
+                            var prop = Modelallproperties[x];
+                            cmd.Parameters.AddWithValue("@" + prop.Name, prop.GetValue(model, null));
+
+
+                        }
+                    }
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
                     if (dr.HasRows)
